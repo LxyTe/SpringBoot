@@ -1,0 +1,15 @@
+com\dist\service2\mapping2\User2Mapping.class
+com\dist\entity\UserEntity2.class
+com\dist\demo\ScheduledTasks.class
+com\dist\service\mapping\User1Mapping.class
+com\dist\service\User1Service.class
+com\dist\demo\SpringBootAicdApplication.class
+META-INF\spring-configuration-metadata.json
+com\dist\datarouse\TestMyBatisConfig2.class
+com\dist\service2\User2Service.class
+com\dist\datarouse\TestMyBatisConfig1.class
+com\dist\dbconfig1\DBConfig1.class
+com\dist\entity\UserEntity.class
+com\dist\controller\TestController.class
+com\dist\dbconfig1\DBConfig2.class
+com\dist\demo\WebLogAspect.class

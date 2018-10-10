@@ -1,0 +1,127 @@
+{
+  "hints": [],
+  "groups": [
+    {
+      "sourceType": "com.dist.dbconfig1.DBConfig1",
+      "name": "mysql.datasource.test",
+      "type": "com.dist.dbconfig1.DBConfig1"
+    },
+    {
+      "sourceType": "com.dist.dbconfig1.DBConfig2",
+      "name": "mysql.datasource.test2",
+      "type": "com.dist.dbconfig1.DBConfig2"
+    }
+  ],
+  "properties": [
+    {
+      "sourceType": "com.dist.dbconfig1.DBConfig1",
+      "name": "mysql.datasource.test.borrow-connection-timeout",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.dist.dbconfig1.DBConfig1",
+      "name": "mysql.datasource.test.login-timeout",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.dist.dbconfig1.DBConfig1",
+      "name": "mysql.datasource.test.maintenance-interval",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.dist.dbconfig1.DBConfig1",
+      "name": "mysql.datasource.test.max-idle-time",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.dist.dbconfig1.DBConfig1",
+      "name": "mysql.datasource.test.max-lifetime",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.dist.dbconfig1.DBConfig1",
+      "name": "mysql.datasource.test.max-pool-size",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.dist.dbconfig1.DBConfig1",
+      "name": "mysql.datasource.test.min-pool-size",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.dist.dbconfig1.DBConfig1",
+      "name": "mysql.datasource.test.password",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.dist.dbconfig1.DBConfig1",
+      "name": "mysql.datasource.test.test-query",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.dist.dbconfig1.DBConfig1",
+      "name": "mysql.datasource.test.url",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.dist.dbconfig1.DBConfig1",
+      "name": "mysql.datasource.test.username",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.dist.dbconfig1.DBConfig2",
+      "name": "mysql.datasource.test2.borrow-connection-timeout",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.dist.dbconfig1.DBConfig2",
+      "name": "mysql.datasource.test2.login-timeout",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.dist.dbconfig1.DBConfig2",
+      "name": "mysql.datasource.test2.maintenance-interval",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.dist.dbconfig1.DBConfig2",
+      "name": "mysql.datasource.test2.max-idle-time",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.dist.dbconfig1.DBConfig2",
+      "name": "mysql.datasource.test2.max-lifetime",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.dist.dbconfig1.DBConfig2",
+      "name": "mysql.datasource.test2.max-pool-size",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.dist.dbconfig1.DBConfig2",
+      "name": "mysql.datasource.test2.min-pool-size",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.dist.dbconfig1.DBConfig2",
+      "name": "mysql.datasource.test2.password",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.dist.dbconfig1.DBConfig2",
+      "name": "mysql.datasource.test2.test-query",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.dist.dbconfig1.DBConfig2",
+      "name": "mysql.datasource.test2.url",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.dist.dbconfig1.DBConfig2",
+      "name": "mysql.datasource.test2.username",
+      "type": "java.lang.String"
+    }
+  ]
+}
