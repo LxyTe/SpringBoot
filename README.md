@@ -14,7 +14,7 @@ Spring Boot的主要优点：<br>
 
 #### 快速入门
   创建一个Maven工程，名字为XXXX
-  
+  ![如图](https://github.com/LxyTe/SpringBoot/blob/master/image/%E5%9F%BA%E6%9C%AC%E4%BE%9D%E8%B5%96.png)
 
 * 1
 * 2
