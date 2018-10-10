@@ -80,3 +80,25 @@ public static void main(String[] args) {<br>
     /META-INF/resources
     举例：我们可以在src/main/resources/目录下创建static，在该位置放置一个图片文件。启动程序后，尝试访问http://localhost:8080/D.jpg。如能显示图片，配置成功。
 
+ ###### 全局异常的处理
+ 
+     @ControllerAdvice 
+     public class GlobalExceptionHandler {
+	  @ExceptionHandler(RuntimeException.class)//表示拦截所有运行时异常
+	  @ResponseBody  //返回一个json串
+	 public Map<String, Object> exceptionHandler() {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("errorCode", "101");
+		map.put("errorMsg", "系統错误!");
+		return map;
+	}
+     }
+       出现异常的时候给用户展示某个指定的页面(可用于遮羞)
+        @ControllerAdvice  可以全局拦截指定的异常，并做想要的包装处理，比如跳转到别的页面，或者返回指定的数据格式等等。
+     public class GlobalExceptionHandler {
+	  @ExceptionHandler(RuntimeException.class)//表示拦截所有运行时异常
+	 public  String  exceptionHandler(ModelAndView mode) {
+		return error.html;
+	}
+     }
+     
