@@ -25,4 +25,24 @@ spring-boot-maven-plugin作用:<br>
 
 
  
-*  创建package命名为com.itmayiedu.controller（根据实际情况修改）
+*  创建package命名为com.dist.controller（根据实际情况修改）<br>
+ >> 创建HelloController类，内容如下 如果是直接使用ide工具生成的springboot项目则此类会被默认创建<br>
+>>@RestController<br>
+>>@EnableAutoConfiguration <br>
+public class HelloController { <br>
+	@RequestMapping("/hello")<br>
+	public String index() {<br>
+		return "Hello World";<br>
+	}	<br>
+public static void main(String[] args) {<br>
+		SpringApplication.run(HelloController.class, args);<br>
+	}<br>
+}<br>
+
+            注解                     |    说明
+            @RestController          | 在上加上RestController 表示修饰该Controller所有的方法返回JSON格式,直接可以编写Restful接口
+            @SpringBootApplication   | 从源代码中得知 @SpringBootApplication 被 @Configuration、@EnableAutoConfiguration、@ComponentScan 注解所修饰，换言之 Springboot 提供了统一的注解来替代以上三个注解，简化程序的配置。
+            @Configuration           | @Configuration 是一个类级注释，指示对象是一个bean定义的源。@Configuration 类通过 @bean 注解的公共方法声明bean。被修饰的类，会扫描，如果有@bean注解，就会创建这个bean
+            @bean                    | @Bean 注释是用来表示一个方法实例化，配置和初始化是由 Spring IoC 容器管理的一个新的对象。
+            @EnableAutoConfiguration |  自动的加载一些配置文件，以达到智能的依赖加载
+            @ComponentScan           |   表示要扫描哪些包下的类  相当于以下代码   <context:component-scan base-package="com.dist">
