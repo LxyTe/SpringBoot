@@ -46,3 +46,37 @@ public static void main(String[] args) {<br>
             @bean                    | @Bean 注释是用来表示一个方法实例化，配置和初始化是由 Spring IoC 容器管理的一个新的对象。
             @EnableAutoConfiguration |  自动的加载一些配置文件，以达到智能的依赖加载
             @ComponentScan           |   表示要扫描哪些包下的类  相当于以下代码   <context:component-scan base-package="com.dist">
+	    
+  #  SpringBoot启动方式
+  SpringBoot由于内嵌了Tomcat，所有不用在放在tomcat下进行执行，可以直接使用run方法来执行，下面说明两种启动方式
+  * One
+> > >@RestController <br>
+@EnableAutoConfiguration<br>
+public class HelloController {<br>
+	@RequestMapping("/hello")<br>
+	public String index() {<br>
+		return "Hello World";<br>
+	}<br>	
+public static void main(String[] args) {<br>
+		SpringApplication.run(HelloController.class, args);<br>
+	}<br>
+}<br>
+启动主程序，打开浏览器访问http://localhost:8080/hello，可以看到页面输出Hello World
+  * Two 使用spring插件自动生成的SpringBoot项目，会带有下面的代码 <br>
+@SpringBootApplication <br>
+       public class SpringBootAicdApplication { <br>
+	public static void main(String[] args) { <br>
+		SpringApplication.run(SpringBootAicdApplication.class, args);<br>
+	    }<br>
+      }<br>
+
+### Web 开发
+    在我们开发Web应用的时候，需要引用大量的js、css、图片等静态资源。
+       默认配置
+    Spring Boot默认提供静态资源目录位置需置于classpath下，目录名需符合如下规则：
+    /static
+    /public
+    /resources
+    /META-INF/resources
+    举例：我们可以在src/main/resources/目录下创建static，在该位置放置一个图片文件。启动程序后，尝试访问http://localhost:8080/D.jpg。如能显示图片，配置成功。
+
