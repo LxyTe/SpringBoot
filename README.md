@@ -97,7 +97,7 @@ public static void main(String[] args) {<br>
         @ControllerAdvice  可以全局拦截指定的异常，并做想要的包装处理，比如跳转到别的页面，或者返回指定的数据格式等等。
      public class GlobalExceptionHandler {
 	  @ExceptionHandler(RuntimeException.class)//表示拦截所有运行时异常
-	 public  String  exceptionHandler(ModelAndView mode) {
+	 public  String  exceptionHandler(Model model) {
 		return error.html;
 	}
      }
