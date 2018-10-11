@@ -272,7 +272,7 @@ public static void main(String[] args) {<br>
 	<artifactId>spring-boot-starter-jta-atomikos</artifactId>
        </dependency>
 
-     连接池基于 automatic配置
+     连接池基于 automatic配置 ，这里只设置了一个，第二个把下面配置中的test修改为test2即可
      mysql.datasource.test.url = jdbc:mysql://localhost:3306/demo?useUnicode=true&characterEncoding=utf-8
      mysql.datasource.test.username = root
      mysql.datasource.test.password = 123
@@ -283,3 +283,25 @@ public static void main(String[] args) {<br>
      mysql.datasource.test.loginTimeout = 30    <!--java数据库连接池，最大可等待获取datasouce的时间-->
      mysql.datasource.test.maintenanceInterval = 60  <!--连接回收时间-->
      mysql.datasource.test.maxIdleTime = 60    <!--最大闲置时间，超过最小连接池连接的连接将将关闭-->
+     
+     集成automatic+jta之后，我们的配置方式也需要做一定的修改。
+      @ConfigurationProperties(prefix = "mysql.datasource.test") 表示读取application.properties中的对应开头的配置属性，然后注入到下面的对应属性中 ,DBConfig2数据源的配置和下面的代码一致，只是需要修改成 mysql.datasource.test2
+      public class DBConfig1 {
+
+	private String url;
+	private String username;
+	private String password;
+	private int minPoolSize;
+	private int maxPoolSize;
+	private int maxLifetime;
+	private int borrowConnectionTimeout;
+	private int loginTimeout;
+	private int maintenanceInterval;
+	private int maxIdleTime;
+	private String testQuery;
+     } 
+      
+   具体注入数据源的代码, [点击查看代码](https://github.com/LxyTe/SpringBoot/blob/master/springBoot-AICD/src/main/java/com/dist/datarouse/TestMyBatisConfig1.java)
+    就是把数据源都交给automatic进行管理，这样保证在automatic中的数据源中原子性一致.但是要注意在run方法所在的类中加入下面的注解，表示扫描并且注册配置文件中的值到具体的属性<br>
+    @EnableConfigurationProperties(value = { DBConfig1.class, DBConfig2.class })  //加载具体的属性配置文件内容
+     
