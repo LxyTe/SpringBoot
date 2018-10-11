@@ -206,5 +206,58 @@ public static void main(String[] args) {<br>
       
      由于springBoot默认加载数据源的时候 ，加载的是 spring.datasource.url 这种格式的配置，所以这里我们需要使用代码来指定加载某个特定的数据源
     
+    
+         @Configuration //表示扫描配置信息，比如创建Bean，数据源等。
+     @MapperScan(basePackages = "com.dist.service", sqlSessionFactoryRef = "test1SqlSessionFactory"),basePackages = "com.dist.service" 表示 这个包下所有 有关 数据库的操作都使用的是 后面引用的那个 session工厂 所指定的数据源。,扫描包引用某个sessionFactory
+     public class Datasource1 {
+ 
+	@Bean(name = "test1DataSource") 创建一个bean名字叫xxx
+	@Primary  //此注解，表明此数据源为默认数据源，一个项目中建议只出现一个默认数据源，否则会抛异常
+	@ConfigurationProperties(prefix = "spring.datasource.test1")在 application.properties中按照这种头部来加载，配置文件
+	public DataSource testDataSource() {
+		return DataSourceBuilder.create().build();// 构建一个datasource
+
+	
+	
+	@Bean(name = "test1SqlSessionFactory")
+	@Primary
+	public SqlSessionFactory testSqlSessionFactory(@Qualifier("test1DataSource") DataSource dataSource)  引用 上面创建的DataSource并且注入到这个对象中 dataSource
+			throws Exception {
+		SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
+		bean.setDataSource(dataSource);[跳到自己博客列表](http://write.blog.csdn.net/postlist)
+		   下面两行注释的代码表示加载**.xml配置中的属性，如果么有配置，则不需要使用
+      //		bean.setMapperLocations(
+     //				new PathMatchingResourcePatternResolver().getResources("classpath:mybatis/mapper/test1/*.xml"));
+		return bean.getObject();
+       }
+       }
+  第二个源代码省略，[点击查看代码](https://github.com/LxyTe/SpringBoot/blob/master/springBoot-AICD/src/main/java/com/dist/datarouse/Datasource2.java)
   
-  
+   ###  SpringBoot事务管理
+    
+        以前在spring中我们管理数据源的事务的时候，需要在xml配置文件中做一下配置
+	<!-- 配置spring的PlatformTransactionManager，名字为默认值 -->	
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">	
+	<property name="dataSource" ref="dataSource" />	</bean>	 绑定一个数据源	
+	<!-- 开启事务控制的注解支持 -->
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	
+  在springBoot中我们不需要在配置xml文件了，可以做个开箱即用（默认集成了）
+    在service层或者dao层中加上@Transactional 注解即可使用，
+        
+	  注意要点：
+	   @Transactional 可以作用于接口、接口方法、类以及类方法上。当作用于类上时，该类的所有 public 方法将都具有该类型的事务属性，同时，我们也可以在方法级别使用该标注来覆盖类级别的定义。
+         虽然 @Transactional 注解可以作用于接口、接口方法、类以及类方法上，但是 Spring 建议不要在接口或者接口方法上使用该注解，因为这只有在使用基于接口的代理时它才会生效。
+	 另外， @Transactional注解应该只被应用到 public 方法上，这是由 Spring AOP 的本质决定的。如果你在 protected、private 或者默认可见性的方法上使用 @Transactional 注解，这将被忽略，也不会抛出任何异常。
+	 
+	 属性              |       类型             |  描述
+	 value             |   String              |  指定使用的事务管理器
+	propagation        |   enum: Propagation   |  事务传播行为设置	
+        isolation          |   enum: Isolation     |  事务的隔离级别设置
+	readOnly           |   boolean             |  读写或者只读，默认为读写
+	timeout            | int (in seconds granularity)|超时时间设置
+         以上为@Transactional 注解常用属性说明。
+	
+ >> SpringBoot分布式事务管理	
+
+     
