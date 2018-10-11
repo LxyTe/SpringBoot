@@ -259,5 +259,27 @@ public static void main(String[] args) {<br>
          以上为@Transactional 注解常用属性说明。
 	
  >> SpringBoot分布式事务管理	
+    目前我所知道解决分布式事务的方法有三种
+   
+    1.  automatic+jta （下面代码依赖于这个）
+    2.  两段提交协议 
+    3.  MQ推送(后续可以使用rabbitmq，和redis集成解决，)。
+   
+   pom依赖
+   
+       <dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-jta-atomikos</artifactId>
+       </dependency>
 
-     
+     连接池基于 automatic配置
+     mysql.datasource.test.url = jdbc:mysql://localhost:3306/demo?useUnicode=true&characterEncoding=utf-8
+     mysql.datasource.test.username = root
+     mysql.datasource.test.password = 123
+     mysql.datasource.test.minPoolSize = 3    最小连接数
+     mysql.datasource.test.maxPoolSize = 25
+     mysql.datasource.test.maxLifetime = 20000  <!--连接最大存活时间，超过这个且没有正在使用的连接将自动销毁,0无限制，1000 =1000s,对于一些会自动中断连接的数据库如mysql，可以设置这个参数，在达到这个时间的时候会自动关闭连接，下次数据库调用的时候就会新建-->
+     mysql.datasource.test.borrowConnectionTimeout = 30 <!--获取连接失败重新获等待最大时间，在这个时间内如果有可用连接，将返回-->
+     mysql.datasource.test.loginTimeout = 30    <!--java数据库连接池，最大可等待获取datasouce的时间-->
+     mysql.datasource.test.maintenanceInterval = 60  <!--连接回收时间-->
+     mysql.datasource.test.maxIdleTime = 60    <!--最大闲置时间，超过最小连接池连接的连接将将关闭-->
