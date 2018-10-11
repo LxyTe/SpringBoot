@@ -142,16 +142,69 @@ public static void main(String[] args) {<br>
        
       注意要点 @MapperScan(basePackages = "com.dist.dao.mapper") 此注解需要放在SpringBoot主类run方法所在的类,作用：扫描mybatis的注解驱动
       @Service
-      public interface UserMapper {  此处为一个借口类，省略实现类，和调用细节
+      public interface UserMapper {  此处为一个借口类，省略实现类，和调用细节,和其它MVC三层操作一样
 	@Select("SELECT * FROM USERS WHERE NAME = #{name}")   
 	User findByName(@Param("name") String name);
 	@Insert("INSERT INTO USERS(NAME, AGE) VALUES(#{name}, #{age})")
 	int insert(@Param("name") String name, @Param("age") Integer age);
       }
-  建议使用参数注入的时候用#不要用$,具体原因请直接百度 [点击](https://blog.csdn.net/u011884440/article/details/78058540)
+  建议使用参数注入的时候用#不要用$,具体原因请 [点击](https://blog.csdn.net/u011884440/article/details/78058540)
    
- > springboot整合使用springjpa
+ > springboot整合使用springjpa（由于spring data jpa是依赖于 hibernate实现的，所有我们的实体类，需要按照hibernate的规则来进行配置 ）
+      pom 依赖
       
-
+                <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+    创建一个测试实体类
+    
+      @Entity(name = "users")
+    public class User {
+	@Id
+	@GeneratedValue
+	private Integer id;
+	@Column
+	private String name;
+	@Column
+	private Integer age;
+      // ..get/set方法
+    }   
+    
+    创建一个UserDaS   优点 jpa可以大大加快我们的开发速度，它自己封装了很多的接口方法，缺点，一些复杂查询和动态查询没有mybatis灵活
+    public interface UserDao extends JpaRepository<User, Integer> { 泛型参数第一个要查询的对象，第二个参数为主键的类型，可以Integer ,String,等  
+    }
+     以下为测试代码，但是在实际开发用 还是建议使用mvc实现，分层调用
+    @RestController
+    public class IndexController {
+	@Autowired
+	private UserDao userDao;
+	@RequestMapping("/index")
+	public String index(Integer id) {
+		User findUser = userDao.findOne(id);  具体的api可以在JpaRepository  里面查询，封装了N多接口
+		System.out.println(findUser.getName());
+		return "success";
+	}
+    }
+    run方法的主类需要加上@EnableJpaRepositories(basePackages = "com.dist.dao") 用来扫描jpa配置 
+                       @EntityScan(basePackageClasses=UserEntity.class) 用来扫描实体类中映射数据配置
+     
+   >>  springboot整合多数据源
+    
+    应用场景：我们用springboot进行多模块开发的时候，有可能每个模块都是一个不同的业务功能，这些业务功能可能对应着不同的数据库，这样就会出现，多数据源的情景了。
+      数据源配置
+       #spring.datasource.test1.driverClassName = com.mysql.jdbc.Driver
+       #spring.datasource.test1.jdbc-url = jdbc:mysql://localhost:3306/demo?useUnicode=true&characterEncoding=utf-8
+       #spring.datasource.test1.username = root
+       #spring.datasource.test1.password = 123
+      ##
+      #spring.datasource.test2.driverClassName = com.mysql.jdbc.Driver
+       注意此处使用了jdbc-url来进行url的配置，如果不这样配置，会导致使用多数据源的时候，SpringBoot加载不到这个url
+      #spring.datasource.test2.jdbc-url = jdbc:mysql://localhost:3306/tt?useUnicode=true&characterEncoding=utf-8  
+      #spring.datasource.test2.username = root
+      #spring.datasource.test2.password = 123 
+      
+     由于springBoot默认加载数据源的时候 ，加载的是 spring.datasource.url 这种格式的配置，所以这里我们需要使用代码来指定加载某个特定的数据源
+    
   
   
