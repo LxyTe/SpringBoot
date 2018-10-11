@@ -102,3 +102,56 @@ public static void main(String[] args) {<br>
 	}
      }
      
+  ### 数据访问
+  > springboot整合使用JdbcTemplate
+  
+     	       <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>  
+		
+  数据源配置
+  
+    spring.datasource.url=jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf-8    //对编码进行过滤，防止出现乱码
+    spring.datasource.username=root
+    spring.datasource.password=root
+    spring.datasource.driver-class-name=com.mysql.jdbc.Driver
+    
+ 测试代码,run方法主类要注意加@ComponentScan(basePackages = "com.dist") 扫描包，此处意思为 扫描以com.dist.* 所有包
+            @Service<br>
+                public class UserServiceImpl implements UserService {<br>
+	        @Autowired<br>
+	          private JdbcTemplate jdbcTemplate;  //自动注入模板类，开箱即用，此层一般都放在 dao层进行配置,以确保代码之间冗余度降低，这里只做测试使用<br>
+	           public void createUser(String name, Integer age) {<br>
+		System.out.println("ssss");<br>
+		jdbcTemplate.update("insert into users values(null,?,?);", name, age);  //此处增，删，改，都可用update接口，查询用select<br>
+	        }<br>
+             }<br>
+> springboot整合使用mybatis
+                pom  依赖
+    	        <dependency><br>
+			<groupId>org.mybatis.spring.boot</groupId><br>
+			<artifactId>mybatis-spring-boot-starter</artifactId><br><br>
+			<version>1.1.1</version><br>
+		</dependency><br>
+ 代码 纯注解开发
+       
+      注意要点 @MapperScan(basePackages = "com.dist.dao.mapper") 此注解需要放在SpringBoot主类run方法所在的类,作用：扫描mybatis的注解驱动
+      @Service
+      public interface UserMapper {  此处为一个借口类，省略实现类，和调用细节
+	@Select("SELECT * FROM USERS WHERE NAME = #{name}")   
+	User findByName(@Param("name") String name);
+	@Insert("INSERT INTO USERS(NAME, AGE) VALUES(#{name}, #{age})")
+	int insert(@Param("name") String name, @Param("age") Integer age);
+      }
+  建议使用参数注入的时候用#不要用$,具体原因请直接百度 [点击](https://blog.csdn.net/u011884440/article/details/78058540)
+   
+ > springboot整合使用springjpa
+      
+
+  
+  
