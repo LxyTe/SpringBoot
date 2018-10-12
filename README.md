@@ -348,17 +348,26 @@ public static void main(String[] args) {<br>
 		maxElementsOnDisk="100000" />
         </ehcache>
        配置信息详细介绍
-       1. <!--  
-       name:缓存名称。  
+        1. <!--  
+        name:缓存名称。  
        maxElementsInMemory：缓存最大个数。  
+       
        eternal:对象是否永久有效，一但设置了，timeout将不起作用。  
+       
        timeToIdleSeconds：设置对象在失效前的允许闲置时间（单位：秒）。仅当eternal=false对象不是永久有效时使用，可选属性，默认值是0，也就是可闲置时间无穷大。  
+       
        timeToLiveSeconds：设置对象在失效前允许存活时间（单位：秒）。最大时间介于创建时间和失效时间之间。仅当eternal=false对象不是永久有效时使用，默认是0.，也就是对象存活时间无穷大。  
+       
        overflowToDisk：当内存中对象数量达到maxElementsInMemory时，Ehcache将会对象写到磁盘中。  
+       
        diskSpoolBufferSizeMB：这个参数设置DiskStore（磁盘缓存）的缓存区大小。默认是30MB。每个Cache都应该有自己的一个缓冲区。  
+       
        maxElementsOnDisk：硬盘最大缓存个数。  
-       diskPersistent：是否缓存虚拟机重启期数据 Whether the disk store persists between restarts of the Virtual Machine. The default value is false.  
+       
+       diskPersistent：是否缓存虚拟机重启期数据 Whether the disk store persists between restarts of the Virtual Machine. The default value is false. 
+       
        memoryStoreEvictionPolicy：当达到maxElementsInMemory限制时，Ehcache将会根据指定的策略去清理内存。默认策略是LRU（最近最少使用）。你可以设置为FIFO（先进先出）或是LFU（较少使用）。  
+       
        clearOnFlush：内存数量最大时是否清除。  
     --> 
     
@@ -480,6 +489,20 @@ public static void main(String[] args) {<br>
 	spring.devtools.restart.additional-paths=src/main/java
 	
  > 发布打包
-	
+ 
+    可以在代码目录下使用 mvn  package 进行打包，也可以使用eclispe进行打包处理
+      打包之后我们可以在jar包所在的具体目录 使用 java –jar   xxx.jar 进行运行
+      特别注意，这样运行的时候我们需要指定一个启动类
+      	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<maimClass>com.dist.demo.SpringBootAicdApplication</maimClass> 表示启动的时候默认run的类
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 	
 	
