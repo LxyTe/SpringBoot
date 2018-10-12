@@ -41,7 +41,7 @@ public static void main(String[] args) {<br>
 
             注解                     |    说明
             @RestController          | 在上加上RestController 表示修饰该Controller所有的方法返回JSON格式,直接可以编写Restful接口
-            @SpringBootApplication   | 从源代码中得知 @SpringBootApplication 被 @Configuration、@EnableAutoConfiguration、@ComponentScan 注解所修饰，换言之 Springboot 提供了统一的注解来替代以上三个注解，简化程序的配置。
+            @SpringBootApplication   | 从源代码中得知 @SpringBootApplication 被 @Configuration、@En ableAutoConfiguration、@ComponentScan 注解所修饰，换言之 Springboot 提供了统一的注解来替代以上三个注解，简化程序的配置。
             @Configuration           | @Configuration 是一个类级注释，指示对象是一个bean定义的源。@Configuration 类通过 @bean 注解的公共方法声明bean。被修饰的类，会扫描，如果有@bean注解，就会创建这个bean
             @bean                    | @Bean 注释是用来表示一个方法实例化，配置和初始化是由 Spring IoC 容器管理的一个新的对象。
             @EnableAutoConfiguration |  自动的加载一些配置文件，以达到智能的依赖加载
@@ -321,3 +321,165 @@ public static void main(String[] args) {<br>
 	</dependency>
   [查看具体代码，请跳转,里面有详细注释](https://github.com/LxyTe/SpringBoot/blob/master/springBoot-AICD/src/main/java/com/dist/demo/WebLogAspect.java)
   
+  ### 集成缓存
+    这里我们主要讲两种缓存方式
+    1.springBoot自带的EhCache缓存
+    2.集成redis 
+ > Ehcache
+     
+     pom文件依赖
+     <dependency>
+           <groupId>org.springframework.boot</groupId>
+           <artifactId>spring-boot-starter-cache</artifactId>
+     </dependency>
+      新建eache配置文件
+      <?xml version="1.0" encoding="UTF-8"?>
+        <ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	  xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"
+	  updateCheck="false">
+	<diskStore path="java.io.tmpdir/Tmp_EhCache" />
+
+	<!-- 默认配置 -->
+	<defaultCache maxElementsInMemory="5000" eternal="false"
+		timeToIdleSeconds="120" timeToLiveSeconds="120"
+		memoryStoreEvictionPolicy="LRU" overflowToDisk="false" />
+
+	<cache name="baseCache" maxElementsInMemory="10000"
+		maxElementsOnDisk="100000" />
+        </ehcache>
+       配置信息详细介绍
+       1. <!--  
+       name:缓存名称。  
+       maxElementsInMemory：缓存最大个数。  
+       eternal:对象是否永久有效，一但设置了，timeout将不起作用。  
+       timeToIdleSeconds：设置对象在失效前的允许闲置时间（单位：秒）。仅当eternal=false对象不是永久有效时使用，可选属性，默认值是0，也就是可闲置时间无穷大。  
+       timeToLiveSeconds：设置对象在失效前允许存活时间（单位：秒）。最大时间介于创建时间和失效时间之间。仅当eternal=false对象不是永久有效时使用，默认是0.，也就是对象存活时间无穷大。  
+       overflowToDisk：当内存中对象数量达到maxElementsInMemory时，Ehcache将会对象写到磁盘中。  
+       diskSpoolBufferSizeMB：这个参数设置DiskStore（磁盘缓存）的缓存区大小。默认是30MB。每个Cache都应该有自己的一个缓冲区。  
+       maxElementsOnDisk：硬盘最大缓存个数。  
+       diskPersistent：是否缓存虚拟机重启期数据 Whether the disk store persists between restarts of the Virtual Machine. The default value is false.  
+       memoryStoreEvictionPolicy：当达到maxElementsInMemory限制时，Ehcache将会根据指定的策略去清理内存。默认策略是LRU（最近最少使用）。你可以设置为FIFO（先进先出）或是LFU（较少使用）。  
+       clearOnFlush：内存数量最大时是否清除。  
+    --> 
+    
+    代码中具体使用 特别快  
+    @CacheConfig(cacheNames = "baseCache") 名字是在xml文件中起的名字
+      public interface UserMapper {
+	@Select("select * from users where name=#{name}")
+	@Cacheable  //表示缓存这个查询语句的结果，缓存在java内存中，
+	UserEntity findName(@Param("name") String name);
+     }
+     注意要在run方法所在的类加上此注解 @EnableCaching  //开启缓存注解  其它操作，可以自己查看API，这里只做接单演示
+  上面的那种方法，个人认为是比较快的，但是没有redis给力，redis是一个非常强大缓存中间件，它还可以做消息的发布订阅，分布式事务，锁等管理，可谓是非常的强大，后续我会写一篇专注于redis的文档。
+  
+     pom依赖
+     <dependency>
+           <groupId>org.springframework.boot</groupId>
+           <artifactId>spring-boot-starter-data-redis</artifactId>   
+    </dependency>
+    
+      redis连接配置，配置在application.properties 
+      #使用redis存储中的第一个库,redis的默认排序第一个为0，共有16个库
+      spring.redis.database=0
+
+     #redis要连接的ip
+    spring.redis.host=127.0.0.1
+
+     #端口号 
+    spring.redis.port=6379
+
+     #密码，可以在redis.windows.conf中 requirepass 行配置 
+    spring.redis.password=123
+
+    #redis连接池的最大连接数量
+    spring.redis.jedis.pool.max-active=1000
+
+    #连接池的最大阻塞时间
+    spring.redis.jedis.pool.max-wait=-1
+
+    #连接池的最大空闲个数
+    spring.redis.jedis.pool.max-idle=10
+
+    #连接池的最小空闲连接
+     spring.redis.jedis.pool.min-idle=2
+
+    #超时后，连接时间
+    spring.redis.timeout=5000
+    
+    使用redis做基本缓存处理 在开发使用的时候，将redis注入dao层，本项目代码，只做测试所用 
+    @Autowired
+	private StringRedisTemplate template;
+	
+		if(template.opsForValue().get("tt")!=null){ redis里面的接口大多存在于 DefaultValueOperations<K, V>此类中，template.opsForValue()方法就是获取DefaultValueOperations 实例对象
+		System.out.println("从缓存查出数据");
+			return template.opsForValue().get("tt"); 此处查询返回的string字符串，如果想使用对象，可以json工具类，自行转换
+		}else {
+			template.opsForValue().set("tt", User2Service.findA().toString());
+		}
+		
+		上面只演示了最简单的缓存操作，其它操作可以在 private StringRedisTemplate template; 模板类中查看相关API
+	
+
+  ### 扩展操作
+   >  定时任务
+   SpringBoot对定时任务的操作，也做了封装，开发非常快速，是真的方便，jar包都不需要导入
+         
+	  在Spring Boot的主类中(run方法的类)加入@EnableScheduling注解，启用定时任务的配置
+	  @Component
+     public class ScheduledTasks {
+            private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+            @Scheduled(fixedRate = 5000)   5秒执行一次，演示所用，具体使用场景，查看相关API zone="0 0 12 * * ?" 表示每天中午12点触发。。
+            public void reportCurrentTime() {
+        System.out.println("现在时间：" + dateFormat.format(new Date()));
+        }
+     }
+   
+   > SpringBoot也集成了Async操作
+          
+	  可以跳过某个执行方法特别长的等待时间，注解式的操作，比spring代码要精简很多
+	     @Async 主需要在service层加入此注解，然后在run方法所在的类上加入@EnableAsync //开启异步注解，即可使用
+	public void async(){
+		System.out.println("正在执行.....循环");
+		for(int i=0;i<10;i++){
+			try {
+				Thread.sleep(1000);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			System.out.println("i--------------"+i);
+		}
+		System.out.println("循环执行完毕......");
+	}  这样就可以实现上面方法的异步调用，当这个方法执行时间过长的时候，也不会影响其他方法的异步执行。就是这么简单的配置
+	
+  > SpringBoot多环境配置
+    SpringBoot启动的时候，默认加载的application.preperties 前缀的配置文件，当我们需要测试环境和开发环境的时候我们只需要
+                   
+		    spring.profiles.active=dev  表示加载开发环境
+   application-dev.properties：开发环境
+   application-test.properties：测试环境
+   application-prod.properties：生产环境
+     
+  > SpringBoot yml 使用
+      创建yml文件 前缀必须是application.yml才会被加载
+        
+	 yml对比properties() 两个文件看个人喜好。感觉没撒大区别
+ * yml的数据结构是 树形式的
+ * yml的数据格式和json的格式很像，都是K-V格式，并且通过”:”进行赋值.properties通过.和=
+ * 每个key的冒号后面一定都要加一个空格； 不加会报错
+            server:
+              port:  8090   
+       context-path: /dist
+ 	 
+  > 热部署
+   
+         #表示放弃模板缓存，这样在修改模板页面的时候，可以实时看到效果
+         spring.thymeleaf.cache=true  
+        #表示开启热部署,配置文件的热部署，配置文件修改后，可以实时看到效果
+	spring.devtools.restart.enabled=true   
+	#表示在src/main/java下的java代码有改动之后就会重启项目，热部署的重启比手动重启要快
+	spring.devtools.restart.additional-paths=src/main/java
+	
+ > 发布打包
+	
+	
+	
