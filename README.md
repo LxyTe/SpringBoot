@@ -304,4 +304,20 @@ public static void main(String[] args) {<br>
    具体注入数据源的代码, [点击查看代码](https://github.com/LxyTe/SpringBoot/blob/master/springBoot-AICD/src/main/java/com/dist/datarouse/TestMyBatisConfig1.java)
     就是把数据源都交给automatic进行管理，这样保证在automatic中的数据源中原子性一致.但是要注意在run方法所在的类中加入下面的注解，表示扫描并且注册配置文件中的值到具体的属性<br>
     @EnableConfigurationProperties(value = { DBConfig1.class, DBConfig2.class })  //加载具体的属性配置文件内容
-     
+    
+   ### 日志管理
+   [配置log4j.properties](https://github.com/LxyTe/SpringBoot/blob/master/springBoot-AICD/src/main/resources/log4j.properties)
+     主要要导入log4j的jar包
+     	     
+	     private static Logger log=Logger.getLogger(TestController.class);  这样使用可以把TestController里面的打印信息都做记录
+	     syso(log.info("...."));
+	     
+    当我们Controller太多的时候，使用上面的日志记录过于麻烦，这里我们可使用AOP做统一处理
+    
+    pom依赖
+        <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aop</artifactId>
+	</dependency>
+  [查看具体代码，请跳转,里面有详细注释](https://github.com/LxyTe/SpringBoot/blob/master/springBoot-AICD/src/main/java/com/dist/demo/WebLogAspect.java)
+  
