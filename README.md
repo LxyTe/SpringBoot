@@ -515,11 +515,22 @@ public static void main(String[] args) {<br>
      调优策越：初始化堆内存和最大堆尽量相同，可以减少GC回收次数（吞吐量由堆值决定）
       -XX:+PrintGCDetails -Xmx32M -Xms32M（越大越好，128,256,512）
       打印详细gc日志，最大堆内存为32M，初始化堆内存为32m。会导致gc回收特别频繁
-       命令行启动配置方式: java -server -Xms32M -Xmx32M -jar xxx.jar
-       
-       
+       命令行启动配置方式: java -server -Xms32M -Xmx32M -jar xxx.jar                 
      
     2) 原理解决：
      @SpringbootApplicaiton 注解底层会调用 @ComponentScan("com.dist.*)  这样项目启动的时候扫包会扫描同级包和递归下面的子类包。影响项目启动时间。可以修改为 @ComponentScan(basePackages = {"具体扫描的包1","具体要扫描的包2"})，@EnableAutoConfiguration 配合使用代替@SpringbootApplication
-    
+     
+     3)修改web容器:
+      排除tomcat依赖
+      <exclusions>
+      <exclusion>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-tomcat</artifactId>
+      </exclusion>
+      </exclusions>
+     加入新依赖 undertow
+    <dev>
+    <groupId>org.springframework.boot</<groupId>>
+     <artifactId>spring-boot-starter-undertow</artifactId>
+    </dev>
   
