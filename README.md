@@ -505,4 +505,18 @@ public static void main(String[] args) {<br>
 		</plugins>
 	</build>
 	
-	
+  > 优化
+     1.jvm参数调优
+     2.扫包优化(启动项目优化)
+     3.默认tomcat容器改为undertow
+     tomcat吞吐量5000 undertow8000
+     
+     1)jvm参数调优
+     调优策越：初始化堆内存和最大堆尽量相同，可以减少GC回收次数（吞吐量由堆值决定）
+      
+     
+     
+    2) 原理解决：
+     @SpringbootApplicaiton 注解底层会调用 @ComponentScan("com.dist.*)  这样项目启动的时候扫包会扫描同级包和递归下面的子类包。影响项目启动时间。可以修改为 @ComponentScan(basePackages = {"具体扫描的包1","具体要扫描的包2"})，@EnableAutoConfiguration 配合使用代替@SpringbootApplication
+    
+  
